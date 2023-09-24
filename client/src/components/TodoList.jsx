@@ -1,30 +1,47 @@
-import React, {useState} from 'react'
-import { Box, List, ListItem, Checkbox, Text } from "@chakra-ui/react"
+import React from 'react'
+import { Box, ListItem, Checkbox, Text } from "@chakra-ui/react"
 
-function TodoList() {
+import { useTodos } from '../hooks/useTodos'
 
-  const [isChecked, setIsChecked] = useState(false)
+function TodoList({ todo, fetchTodos }) {
 
-  const toggleChecked = () => {
-    setIsChecked(!isChecked);
+  const { dispatch } = useTodos()
+
+  const toggleChecked = async (id) => {
+    const response = await fetch('http://localhost:5000/api/todos/' + id, {
+      method: 'PATCH',
+      id
+    })
+    const json = await response.json()
+    fetchTodos()
+    return json
   }
-  
+
+  const handleClick = async () => {
+    const response = await fetch('http://localhost:5000/api/todos/' + todo._id, {
+      method: 'DELETE'
+    })
+    const json = await response.json()
+
+    if (response.ok) {
+      dispatch({ type: 'DELETE_TODO', payload: json })
+    }
+    fetchTodos()
+  }
+
   return (
-    <Box mt={10}>
-      <List spacing={3}>
-        <ListItem display={"flex"} alignItems={'center'} justifyContent={'space-between'}>
-          <Box onClick={toggleChecked}>
-            <Checkbox colorScheme='whatsapp' size={'lg'} as={'div'} >
-              <Text fontSize={22} fontWeight={isChecked === true ? 'italic' : 'semibold'} as={isChecked === true ? 'del' : ''} color={isChecked === true ? 'gray.400' : ''} >Lorem ipsum dolor sit amet, consectetur adipisicing elit</Text>
-            </Checkbox>
-          </Box>
-          <Box >
-            <i className="fa-solid fa-pen" style={{ cursor: 'pointer', marginRight: '25px' }}></i>
-            <i className="fa-solid fa-minus" style={{ cursor: 'pointer' }}></i>
-          </Box>
-        </ListItem>
-      </List>
-    </Box>
+
+    <ListItem display={"flex"} alignItems={'center'} justifyContent={'space-between'}>
+      <Box onClick={() => toggleChecked(todo._id)}>
+        <Checkbox colorScheme='whatsapp' size={'lg'} as={'div'} isChecked={todo.isCompleted}>
+          <Text fontSize={22} fontWeight={todo.isCompleted === true ? 'italic' : 'semibold'} as={todo.isCompleted === true ? 'del' : ''} color={todo.isCompleted === true ? 'gray.400' : ''} >{todo.title}</Text>
+        </Checkbox>
+      </Box>
+      <Box >
+        <i className="fa-solid fa-minus" style={{ cursor: 'pointer', fontSize: '24px' }} onClick={handleClick} ></i>
+      </Box>
+    </ListItem>
+
   )
 }
 
