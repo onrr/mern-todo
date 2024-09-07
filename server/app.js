@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const todosRoute = require('./routes/todosRoute')
 
@@ -8,6 +9,7 @@ const app = express()
 
 // Middlewares
 app.use(express.json())
+app.use(cors())
 app.use((req, res, next) => {
     console.log(req.path, req.method)
     next()

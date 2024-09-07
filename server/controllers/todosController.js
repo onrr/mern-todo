@@ -58,15 +58,15 @@ const deleteTodo = async (req, res) => {
 
 // update a Todo
 const updateTodo = async (req, res) => {
-  const { id } = req.params
+  const { id, isCompleted } = req.params
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({error: 'No such Todo'})
   }
 
-  const todo = await Todo.findOneAndUpdate({_id: id}, {
-    ...req.body
-  })
+  const todoId = {_id: id}
+  const update = { isCompleted: !isCompleted }
+  const todo = await Todo.findOneAndUpdate(todoId, update)
 
   if (!todo) {
     return res.status(400).json({error: 'No such Todo'})
