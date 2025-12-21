@@ -7,14 +7,30 @@ function TodoList({ todo, fetchTodos }) {
 
   const { dispatch } = useTodos()
 
-  const toggleChecked = async (id) => {
-    const response = await fetch('http://localhost:5000/api/todos/' + id, {
-      method: 'PATCH',
-      id
-    })
-    const json = await response.json()
-    fetchTodos()
-    return json
+  const toggleChecked = async (todo) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/todos/${todo._id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            isCompleted: !todo.isCompleted
+          })
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Update failed')
+      }
+
+      await response.json()
+      fetchTodos()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const handleClick = async () => {
@@ -32,8 +48,8 @@ function TodoList({ todo, fetchTodos }) {
   return (
 
     <ListItem display={"flex"} alignItems={'center'} justifyContent={'space-between'}>
-      <Box onClick={() => toggleChecked(todo._id)}>
-        <Checkbox colorScheme='whatsapp' size={'lg'} as={'div'} isChecked={todo.isCompleted}>
+      <Box>
+        <Checkbox colorScheme='whatsapp' size={'lg'} onChange={() => toggleChecked(todo)} isChecked={todo.isCompleted}>
           <Text fontSize={22} fontWeight={todo.isCompleted === true ? 'italic' : 'semibold'} as={todo.isCompleted === true ? 'del' : ''} color={todo.isCompleted === true ? 'gray.400' : ''} >{todo.title}</Text>
         </Checkbox>
       </Box>
