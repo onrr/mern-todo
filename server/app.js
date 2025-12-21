@@ -19,9 +19,10 @@ app.use((req, res, next) => {
 app.use('/api/todos', todosRoute)
 
 
-const PORT = 5000
+const PORT = process.env.PORT || 5000
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1/todos-db'
 // Conect To DB
-mongoose.connect('mongodb://127.0.0.1/todos-db')
+mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('Connect To DB')
     // listen to port
