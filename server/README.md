@@ -24,15 +24,6 @@ You need MongoDB to run this backend. You can install it locally or use Docker.
 - Follow the installation instructions for your OS.  
 - Start MongoDB
 
-#### Install docker
-- Download Docker from the official website: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)  
-- Follow the installation instructions for your OS.  
-- Install mongodb in docker:
-```bash
-docker pull mongo
-docker run -d -p 27017:27017
-```
-
 ---
 
 ## Required Packages
@@ -56,12 +47,39 @@ npm run dev  (optional / running with nodemon)
 ---
 
 ## Running with Docker
+
+#### Install Docker
+- Download Docker from the official website: [https://www.docker.com/get-started/](https://www.docker.com/get-started/)  
+- Follow the installation instructions for your OS. 
+
+#### Install Image
 - Pull the backend image from Docker Hub:
 ```bash
 docker pull onrry/todo-app:v1
 ```
-- Run backend container:
-```bash
-docker run onrry/todo-app:v1
-```
+#### Install Mongo Image
 
+- Install mongodb in docker:
+```bash
+docker pull mongo
+```
+- Create a Docker network
+```bash
+docker network create todo-app
+```
+- Run MongoDB Container
+```bash
+docker run -d --name mongo --network todo-app mongo
+```
+- Run the application container
+```bash
+docker run -d -p 5000:5000 --name todo --network todo-app onrry/todo-app:v1
+```
+##### Port Mapping Explanation (-p)
+```bash
+-p 5000:5000
+-p <HOST_PORT>:<CONTAINER_PORT>
+```
+- The application always runs on port 5000 inside the container
+- (HOST_PORT) -> Port on your local machine
+- (CONTAINER_PORT) -> port inside the container. (The container port must stay 5000)
