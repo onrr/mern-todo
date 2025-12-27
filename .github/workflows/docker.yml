@@ -25,4 +25,6 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USER }}/mern-todo-server:latest
+          tags: |
+            ${{ secrets.DOCKER_USER }}/mern-todo-server:latest
+            ${{ secrets.DOCKER_USER }}/mern-todo-server:v1.0.${{ github.run_number }}
