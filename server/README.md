@@ -55,7 +55,7 @@ npm run dev  (optional / running with nodemon)
 #### Install Image
 - Pull the backend image from Docker Hub:
 ```bash
-docker pull onrry/todo-app:v1
+docker pull onrry/mern-todo-server
 ```
 #### Install Mongo Image
 
@@ -73,7 +73,7 @@ docker run -d --name mongo --network todo-app mongo
 ```
 - Run the application container
 ```bash
-docker run -d -p 5000:5000 --name todo --network todo-app onrry/todo-app:v1
+docker run -d -p 5000:5000 --name todo --network todo-app onrry/mern-todo-server
 ```
 ##### Port Mapping Explanation (-p)
 ```bash

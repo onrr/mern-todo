@@ -17,6 +17,9 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/todos', todosRoute)
+app.use('/check', (req, res) => {
+    res.status(200).json({status: 'Everything is OK!'})
+})
 
 
 const PORT = process.env.PORT || 5000
