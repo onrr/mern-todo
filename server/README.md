@@ -83,3 +83,43 @@ docker run -d -p 5000:5000 --name todo --network todo-app onrry/mern-todo-server
 - The application always runs on port 5000 inside the container
 - (HOST_PORT) -> Port on your local machine
 - (CONTAINER_PORT) -> port inside the container. (The container port must stay 5000)
+
+---
+
+## Todo App API Tests
+
+This project contains **API tests** for this backend.
+
+#### 1. Test Scenarios
+
+We wrote tests for **all CRUD operations** of the Todo API:
+
+| HTTP Method | Endpoint           | Tested Scenarios |
+|------------|------------------|----------------|
+| GET        | `/api/todos`      | Return all todos |
+| GET        | `/api/todos/:id`  | Return todo if exists, return 404 if not |
+| POST       | `/api/todos`      | Create new todo, return 400 if title missing |
+| PATCH      | `/api/todos/:id`  | Update `isCompleted`, return 400 if todo not found |
+| DELETE     | `/api/todos/:id`  | Delete todo, return 400 if todo not found |
+
+- Happy path (successful requests) are tested  
+- Error path (wrong input, missing data, not found) are also tested
+
+#### 2. Tools
+
+- **Jest** → Test framework to run and organize tests  
+- **Supertest** → To send HTTP requests to the API  
+- **Node.js** → Backend server 
+
+#### 3. How to run tests
+
+3.1. **Start the server**
+```bash
+npm start
+```
+
+3.2. **Run test file**
+```bash
+npm test
+```
+---
